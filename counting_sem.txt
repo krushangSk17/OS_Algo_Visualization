@@ -1,0 +1,180 @@
+import pygame
+
+pygame.init()
+s = 4
+p = 1
+flag = False
+background_colour = (255, 255, 255)
+(width, height) = (1000, 780)
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption('Counting Semaphore')
+screen.fill(background_colour)
+font = pygame.font.SysFont('arial', 24)
+shape_color = (0, 0, 0)
+standImg = []
+standx = []
+standy = []
+standx_change = []
+standy_change = []
+
+for i in range(5):
+    st = "p" + str(i + 1) + ".png"
+    standImage = pygame.image.load(st)
+    standImg.append(pygame.transform.scale(standImage, (100, 100)))
+    standy_change.append(0.4)
+    standx_change.append(0.4)
+    if i == 0:
+        standx.append(60)
+    else:
+        standx.append(standx[i - 1] + 200)
+    standy.append(300)
+
+
+def signal_text(x, y):
+    signal = font.render("SIGNAL() ", True, (0, 100, 0))
+    screen.blit(signal, (x, y + 100))
+
+
+def wait_text(x, y):
+    wai = font.render("WAIT() ", True, (255, 0, 0))
+    screen.blit(wai, (x, y))
+
+
+def complete_text(x, y):
+    complete = font.render("Completed ", True, (255, 0, 0))
+    screen.blit(complete, (x - 10, y + 110))
+
+
+def semaphore_text():
+    pygame.draw.ellipse(screen, shape_color, ((410, 50), (170, 70)), 4)
+    semaphore = font.render("Semaphore " + str(s), True, (0, 100, 240))
+    screen.blit(semaphore, (435, 70))
+
+
+running = True
+while running:
+    screen.fill(background_colour)
+    semaphore_text()
+    pygame.draw.rect(screen, shape_color, [55, 500, 900, 200], 4)
+    cs = font.render("Critical Section ", True, (0, 100, 240))
+    screen.blit(cs, (450, 700))
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    if not flag:  # before cs
+        if p == 1:  # up
+            standy[0] = standy[0] - standy_change[0]
+            if standy[0] <= 74.8:
+                standy[0] = 75
+                standy_change[0] = -0.4
+                s = s - 1
+            if standy[0] >= 550:
+                standy[0] = 550
+                p = 2
+        elif p == 2:
+            standy[1] = standy[1] - standy_change[1]
+            if standy[1] <= 74.8:
+                standy[1] = 75
+                standy_change[1] = -0.4
+                s = s - 1
+            if standy[1] >= 550:
+                standy[1] = 550
+                p = 3
+        elif p == 3:
+            standy[2] = standy[2] - standy_change[2]
+            if standy[2] <= 110:
+                standy[2] = 110
+                standy_change[2] = -0.4
+                s = s - 1
+            if standy[2] >= 550:
+                standy[2] = 550
+                p = 4
+        elif p == 4:
+            standy[3] = standy[3] - standy_change[3]
+            if standy[3] <= 70:
+                standy[3] = 70
+                standy_change[3] = -0.4
+                s = s - 1
+            if standy[3] >= 550:
+                standy[3] = 550
+                p = 5
+        elif p == 5:
+            standy[4] = standy[4] - standy_change[4]
+            if standy[4] <= 70:
+                standy[4] = 70
+                standy_change[4] = -0.4
+                s = s - 1
+            if standy[4] >= 300:
+                standy[4] = 300
+                wait_text(standx[4] + 10, standy[4] + 110)
+                p = 1
+                flag = True
+    else:
+        if p == 1:
+            if s == -1:
+                standy[0] = standy[0] + standy_change[0]
+                signal_text(standx[0], standy[0])
+                if standy[0] <= 110:
+                    standy[0] = 110
+                    standy_change[0] = 0.4
+                    s = s + 1
+                    complete_text(standx[0], standy[0])
+                wait_text(standx[4] + 10, standy[4] + 110)
+            if s == 0:
+                complete_text(standx[0], standy[0])
+                standy[4] = standy[4] - standy_change[4]
+                if standy[4] >= 550:
+                    standy[4] = 550
+                    p = 2
+
+        elif p == 2:
+            complete_text(standx[0], standy[0])
+            standy[1] = standy[1] + standy_change[1]
+            signal_text(standx[1], standy[1])
+            if standy[1] <= 110:
+                standy[1] = 110
+                standy_change[1] = 0.4
+                s = s + 1
+                complete_text(standx[1], standy[1])
+                p = 3
+        elif p == 3:
+            complete_text(standx[0], standy[0])
+            complete_text(standx[1], standy[1])
+            standy[2] = standy[2] + standy_change[2]
+            signal_text(standx[2], standy[2])
+            if standy[2] <= 110:
+                standy[2] = 110
+                standy_change[2] = 0.4
+                s = s + 1
+                complete_text(standx[2], standy[2])
+                p = 4
+        elif p == 4:
+            for i in range(3):
+                complete_text(standx[i], standy[i])
+            standy[3] = standy[3] + standy_change[3]
+            signal_text(standx[3], standy[3])
+            if standy[3] <= 110:
+                standy[3] = 110
+                standy_change[3] = 0.4
+                s = s + 1
+                complete_text(standx[3], standy[3])
+                p = 5
+        elif p == 5:
+            for i in range(4):
+                complete_text(standx[i], standy[i])
+            standy[4] = standy[4] + standy_change[4]
+            signal_text(standx[4], standy[4])
+            if standy[4] <= 110:
+                standy[4] = 110
+                standy_change[4] = 0.4
+                p=6
+                s=4
+                complete_text(standx[4], standy[4])
+        else:
+            for i in range(5):
+                complete_text(standx[i], standy[i])
+            running=False
+
+    for i in range(len(standx)):
+        screen.blit(standImg[i], (standx[i], standy[i]))
+    pygame.display.update()

@@ -1,0 +1,17 @@
+we will see binary semaphore now. 
+
+here is a GUI for the binary semaphore.
+
+This is also known as mutex lock. Binary Semaphore strictly provides mutual exclusion. Here, instead of having more than 1 slots available in the critical section, we can only have at most 1 process in the critical section. The semaphore can have only two values, 0 or 1.
+
+here is an algorithm for binary semaphore.all the processes that wants to go inside the critical section has to perform wait operation as a entry section and all the processes that wants to come outside the critical section has to perform the signal opration as the exit section.
+
+press s to start the animation. first p1 will go and change the semaphore value to 0 and will enter into the critical section. 
+
+now p2 will come, as the semaphore value is 0 p2 will go to the block queue.
+
+now p1 will come outside the critical section and change the semaphore value to 1 and at the same time p2 will come outside from the block queue and will enter into the critical section. 
+
+now p2 will come outside the critical section and change the semaphore value to 1. 
+
+binary semaphore ensures the mutual exclusion and bounded waiting for multipple process. 
