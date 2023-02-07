@@ -15,10 +15,3 @@ Operating system algorithm visualization using python pygame library.
         6.  Counting semaphore
         7.  Binary semaphore 
         8.  Dining philosopher 
-        
-Group members:
-1. Krushang Satani
-2. Naisargi Savaliya
-3. Chailcy patel
-4. prasanna patel
-5. dineesha soni
